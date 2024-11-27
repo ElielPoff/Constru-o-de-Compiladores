@@ -1,1 +1,20 @@
-int a = 10;
+int main() {
+    int idade;
+
+    // Solicita ao usuário que informe a idade
+    printf("Digite a sua idade: ");
+    scanf("%d", &idade);
+
+    // Verifica se a pessoa pode votar
+    if (idade >= 16) {
+        if (idade < 18 || idade >= 70) {
+            printf("Você pode votar, mas o voto é opcional.\n");
+        } else {
+            printf("Você pode votar, e o voto é obrigatório.\n");
+        }
+    } else {
+        printf("Você não pode votar ainda.\n");
+    }
+
+    return 0;
+}

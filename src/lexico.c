@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <string.h>
 
+
 typedef enum {
     NUM_INT,
     NUM_DEC,
@@ -18,6 +19,21 @@ typedef struct {
     TipoToken tipo;
     char valor[100];
 } Token;
+
+#define MAX_TOKENS 1000
+
+Token tokens[MAX_TOKENS];  // Armazena os tokens extraídos pelo analisador léxico
+int currentToken = 0;  // Índice do token atual
+
+// Função para pegar o próximo token da fila
+Token obterToken() {
+    return tokens[currentToken++];
+}
+
+// Função para verificar se há mais tokens
+int haMaisTokens() {
+    return currentToken < MAX_TOKENS && tokens[currentToken].tipo != DESCONHECIDO;
+}
 
 // Palavras reservadas
 const char *palavrasReservadas[] = {
@@ -175,19 +191,6 @@ void analisarLexico(const char *entrada) {
                 token.tipo = PALAVRA_RESERVADA;
             } else {
                 token.tipo = IDENTIFICADOR;
-                // Adiciona o identificador à tabela de símbolos se ainda não foi adicionado
-                int idExistente = 0;
-                for (int k = 0; k < indiceTabelaSimbolos; k++) {
-                    if (strcmp(tabelaSimbolos[k].nome, token.valor) == 0) {
-                        idExistente = 1;
-                        break;
-                    }
-                }
-                if (!idExistente) {
-                    strcpy(tabelaSimbolos[indiceTabelaSimbolos].nome, token.valor);
-                    tabelaSimbolos[indiceTabelaSimbolos].id = indiceTabelaSimbolos + 1;
-                    indiceTabelaSimbolos++;
-                }
             }
         }
         // Verifica texto (strings)
@@ -223,7 +226,8 @@ void analisarLexico(const char *entrada) {
             token.valor[j] = '\0';
         }
 
-        imprimirToken(token);
+        // Armazena o token na fila
+        tokens[currentToken++] = token;
     }
 }
 
@@ -233,26 +237,4 @@ void imprimirTabelaSimbolos() {
     for (int i = 0; i < indiceTabelaSimbolos; i++) {
         printf("Identificador (ID %d) : %s\n", tabelaSimbolos[i].id, tabelaSimbolos[i].nome);
     }
-}
-
-// Função principal
-int main() {
-    char caminhoArquivo[100];
-    printf("Digite o caminho do arquivo com o código-fonte: ");
-    scanf("%s", caminhoArquivo);
-
-    FILE *arquivo = fopen(caminhoArquivo, "r");
-    if (!arquivo) {
-        perror("Erro ao abrir o arquivo");
-        return 1;
-    }
-
-    char linha[256];
-    while (fgets(linha, sizeof(linha), arquivo)) {
-        analisarLexico(linha);
-    }
-
-    fclose(arquivo);
-    imprimirTabelaSimbolos(); // Imprime a tabela de símbolos ao final
-    return 0;
 }

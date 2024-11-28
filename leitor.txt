@@ -15,6 +15,5 @@ int main() {
     } else {
         printf("Você não pode votar ainda.\n");
     }
-
     return 0;
 }

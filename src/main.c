@@ -4,9 +4,6 @@
 #include "lexico.h"
 #include "sintatico.h"
 
-
-// Função principal
-
 int main() {
     char caminhoArquivo[100];
     printf("Digite o caminho do arquivo com o código-fonte: ");

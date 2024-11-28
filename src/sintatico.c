@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lexico.c"
-#include "global.h"
 
 Token tokens[100];
 int indiceTokens = 0;
